@@ -11,7 +11,7 @@
 			This tool is used to send diagnostic commands to a specified JVM. To demonstrate how to work
 			with <code>jcmd</code>, we shall first write a simple Java program as follows
 		</p>
-		<code-block lang="java" src="insidejava/javatools/jcmd/LoopForever.java"/>
+		<code-block lang="java" src="insidejava/javatools/jcmd/LoopForEver.java"/>
 		<p>
 			The code is really simple having only an infinite loop. The loop is inserted deliberately so that it
 			makes a JVM up all the time and we can inspect the JVM properties in the meanwhile. Compile the
