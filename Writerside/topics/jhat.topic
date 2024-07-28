@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic id="jhat"
+       title="jhat"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+	<note>
+		<p>
+			You need to have <code>Java 8</code> installed to use <code>jhat</code>
+		</p>
+		<p>
+			<code>jhat</code> was deprecated and removed in Java 9. It’s no longer available in newer JDK versions,
+			including JDK 17.
+		</p>
+	</note>
+
+	<procedure id="0procedure6">
+		<p>
+			The <code>jhat (java heap analysis tool)</code> is a useful tool to retrieve information from a heap
+			dump file created using a tool like <code>jmap</code>.
+		</p>
+		<p>
+			It is a valuable tool for debugging and understanding programs. It allows us to navigate object
+			structures to learn how objects are interconnected in a program at runtime. It also allows us to
+			trace the references to a given object from the root set, which is particularly useful for tracking
+			down unnecessary object retention known as “memory leaks”. It takes the following form:
+		</p>
+		<code-block lang="console">
+			jhat [options] &lt;heap-dump-file&gt;
+		</code-block>
+
+		<p>
+			It parses the specified dump file and starts a web server. A web browser may then be used to get
+			desired data. The web server supports a few pre-designed queries as well as custom queries written
+			in <code>QQL (Object Query Language)</code>, which is a language similar to SQL to query heap dumps.
+		</p>
+		<p>
+			We shall use the same <code>LoopForEver.java</code> program to demonstrate this tool. To use
+			<code>jhat</code>, we have to dump heap information in a file. There are several ways to generate a java
+			heap dump:
+		</p>
+		<list>
+			<li>
+				Use <code>jmap</code> with -dump option to obtain a heap dump at runtime;
+			</li>
+			<li>
+				Use <code>jconsole</code> option to obtain a heap dump via HotSpotDiagnosticMXBean at runtime;
+			</li>
+			<li>
+				Use java by specifying <code>-XX:+HeapDumpOnOutOfMemoryError</code> VM option; Heap dump will be
+				generated when OutOfMemoryError is thrown;
+			</li>
+			<li> Use <code>jcmd</code>;</li>
+			<li>Use <code>hprof</code></li>
+		</list>
+		<p>
+			The standard tool <code>jmap</code> may be used for this purpose. However, <code>jmap</code> expects a local
+			VM identifier (lvmid), which is typically, but not necessarily, the operating system’s process identifier
+			for the JVM process. We can use Java tools such as <code>jps</code> and <code>jcmd</code> to find such
+			lvmid. We used <code>jcmd</code> as follows:
+		</p>
+		<code-block lang="console">
+			jcmd
+		</code-block>
+		<p> A sample output of this command is shown below</p>
+		<code-block lang="console">
+			13716 LoopForEver
+			16044 jdk.jcmd/sun.tools.jcmd.JCmd
+		</code-block>
+		<p>
+			We can easily see that the lvmid of the process is <code>13716</code>. This ID can be used to create a dump
+			file using <code>jmap</code> command as follows:
+		</p>
+		<code-block lang="console">
+			jmap -dump:file=myHeap 13716
+		</code-block>
+		<p>
+			Here <code>myHeap</code> is the name of the file where we want to dump and <code>13716</code> is the lvmid
+			of the JVM running the application. If everything is fine, you will see the following message:
+		</p>
+		<code-block lang="console">
+			Dumping heap to
+			C:\Users\echosodyssey\IdeaProjects\Learn-Java\Writerside\codeSnippets\insidejava\javatools\jhat\myHeap ...
+			Heap dump file created [4222892 bytes in 0.047 secs]
+		</code-block>
+		<p>
+			The file <code>myHeap</code> contains a snapshot of all the live objects and classes at the moment it was
+			created. Diagnosed process may be terminated after dumping heap with <code>jmap</code> command. There is
+			also a straightforward way to generate the dump file using java command as follows
+		</p>
+		<code-block lang="console">
+			java -Xrunhprof:file=myHeap,format=b LoopForEver
+		</code-block>
+		<p>
+			When this program terminates (terminate using
+			<shortcut>Ctrl+C</shortcut>
+			as this program loops forever), a dump file is generated. This is useful if your program does not take
+			sufficient time to run to create the dump file using <code>jmap</code>. The <code>jcmd</code> command can
+			also be used to create the dump file as follows:
+		</p>
+		<code-block lang="console">
+			jcmd 13716 GC.heap_dump myHeap
+		</code-block>
+		<p>
+			The dump file is now ready to be used by <code>jhat</code>. Use the following command to start
+			<code>jhat</code>
+		</p>
+		<code-block lang="console">
+			jhat myHeap
+		</code-block>
+		<p>
+			If everything goes right, the following message appears:
+		</p>
+		<code-block lang="console">
+			Reading from myHeap...
+			Dump file created Sun Jul 28 12:19:10 EAT 2024
+			Snapshot read, resolving...
+			Resolving 12298 objects...
+			Chasing references, expect 2 dots..
+			Eliminating duplicate references..
+			Snapshot resolved.
+			Started HTTP server on port 7000
+			Server is ready.
+		</code-block>
+		<p>
+			The <code>jhat</code> tool starts a web server on port 7000. Open a web browser and navigate to
+			<a href="http://localhost:7000">
+				<format color="DarkOrange">
+					http://localhost:7000
+				</format>
+			</a>
+		</p>
+		<p>
+			The <code>jhat</code> can obviously be started on a separate computer having the dump file. Usually
+			analyzers choose to zip the dump and move it to machine more accessible to them and with enough resource.
+		</p>
+		<p>
+			The <code>jhat</code> parses the heap dump and make the data available on a web server that it runs by
+			default on port 7000. Use <code>--port</code>option to start the web server on a different port.
+		</p>
+		<p>
+			For local computers, instead of IP address, we can use localhost or any loopback address such
+			as 127.0.0.1. The page looks like this
+		</p>
+		<img alt="image_2.png" border-effect="rounded" src="image_2.png"/>
+		<p> As we can see, this page contains some readymade queries.</p>
+		<p>
+			They let us surf along all the classes and objects. We shall be able to check how many instances
+			of each class were alive in the moment the heap was created. By clicking on a query link, we can
+			reach other pages containing other queries.
+		</p>
+		<p>
+			The last link is interesting as it allows us to write custom queries using OQL. The jhat also provides a
+			useful page to get help on OQL. The URL of this page with the default port is:
+			<a href="http://localhost:7000/oqlhelp/">
+				<format color="DarkOrange">
+					http://localhost:7000/oqlhelp/
+				</format>
+			</a>
+		</p>
+
+	</procedure>
+
+</topic>

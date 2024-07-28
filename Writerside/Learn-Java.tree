@@ -12,6 +12,8 @@
 			<toc-element topic="javadoc.topic"/>
 			<toc-element topic="javap.topic"/>
 			<toc-element topic="jcmd.topic"/>
+			<toc-element topic="jhat.topic"/>
+			<toc-element topic="jdb.topic"/>
 		</toc-element>
 	</toc-element>
 </instance-profile>

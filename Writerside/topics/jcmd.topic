@@ -417,7 +417,7 @@
 			Finally, to dump the recordings to a file, we can use The <code>JFR.dump</code> command as follows:
 		</p>
 		<code-block lang="console">
-			jcmd 432 JFR.dump name=test file_name=r30s.jfr
+			jcmd 14848 JFR.dump name=test file_name=r30s.jfr
 		</code-block>
 		<note>
 			<code>jcmd</code> must be used on the same machine where the JVM is running, and have the same
