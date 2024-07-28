@@ -1,5 +1,3 @@
-package cloud.yebei.advancedjava.insidejava.javatools.javadoc;
-
 /**
  * Represents the class of two-dimensional geometrical points.
  *

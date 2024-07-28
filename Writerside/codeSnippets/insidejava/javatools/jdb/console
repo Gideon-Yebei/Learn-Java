@@ -1,0 +1,42 @@
+$ jdb Test
+Initializing jdb ...
+> stop in Test.main(java.lang.String[])
+Deferring breakpoint Test.main(java.lang.String[]).
+It will be set after the class is loaded.
+> stop in Test.main
+Deferring breakpoint Test.main.
+It will be set after the class is loaded.
+> run
+run Test
+Set uncaught java.lang.Throwable
+Set deferred uncaught java.lang.Throwable
+>
+VM Started: Set deferred breakpoint Test.main
+Set deferred breakpoint Test.main(java.lang.String[])
+
+Breakpoint hit:
+Breakpoint hit: "thread=main", Test.main(), line=5 bci=0
+5               int x = 2, y = 3;
+
+main[1] list
+1    public class Test {
+2       int v = 4;
+3
+4       public static void main(String[] args) {
+5 =>            int x = 2, y = 3;
+6               int z = add(x, y);
+7               Test t = new Test();
+8               t.set(6);
+9               System.out.println(x + "+" + y + "=" + z);
+10      }
+main[1] next
+>
+Step completed: "thread=main", Test.main(), line=6 bci=4
+6               int z = add(x, y);
+
+main[1] next
+>
+Step completed: "thread=main", Test.main(), line=7 bci=10
+7               Test t = new Test();
+
+main[1]
