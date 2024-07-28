@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"cloud.yebei.advancedjava.insidejava.javatools.javadoc"}];updateSearchResults();

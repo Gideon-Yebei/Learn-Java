@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"cloud.yebei.advancedjava.insidejava.javatools.javadoc","c":"Point","l":"getX()"},{"p":"cloud.yebei.advancedjava.insidejava.javatools.javadoc","c":"Point","l":"Point(int, int)","u":"%3Cinit%3E(int,int)"}];updateSearchResults();

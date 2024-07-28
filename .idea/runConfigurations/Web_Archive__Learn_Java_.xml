@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Web Archive (Learn-Java)" type="StardustRunConfiguration" factoryName="save-as-zip">
+    <option name="folderPath" value="$PROJECT_DIR$" />
+    <option name="instanceId" value="Learn-Java" />
+    <option name="instanceName" value="Learn-Java" />
+    <method v="2" />
+  </configuration>
+</component>

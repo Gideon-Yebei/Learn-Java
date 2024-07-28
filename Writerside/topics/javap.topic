@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic id="javap"
+       title="javap"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+	<procedure>
+		<p>
+			This command line tool displays information in brief about the methods, constructors and fields
+			present in the specified class(es). The syntax of using <code>javap</code> is:
+		</p>
+		<code-block lang="console">
+			javap [options] [classes]
+		</code-block>
+		<p>
+			The name of the class(es) must be a fully qualified class name (i.e., including package name).
+			Here is an example:
+		</p>
+		<code-block lang="console">
+			javap java.lang.Object
+		</code-block>
+		<p>
+			This displays the information of the class <code>Object</code>. (the root class of Java class hierarchy) in
+			the package <code>java.lang</code>. Here is the sample output:
+		</p>
+		<code-block lang="console">
+			Compiled from "Object.java"
+			public class java.lang.Object {
+			public java.lang.Object();
+			public final native java.lang.Class&gt;?&lt; getClass();
+			public native int hashCode();
+			public boolean equals(java.lang.Object);
+			protected native java.lang.Object clone() throws java.lang.CloneNotSupportedException;
+			public java.lang.String toString();
+			public final native void notify();
+			public final native void notifyAll();
+			public final void wait() throws java.lang.InterruptedException;
+			public final void wait(long) throws java.lang.InterruptedException;
+			public final void wait(long, int) throws java.lang.InterruptedException;
+			protected void finalize() throws java.lang.Throwable;
+			}
+		</code-block>
+		<note>
+			<code>javap</code> does not show the code of the methods/constructors. It shows only the prototypes
+			of methods/constructors. It is useful especially to those who want to quickly find the method signatures
+			of a class.
+		</note>
+		<p>
+			For example, if you do not have any IDE and want to quickly know the methods available
+			on <code>java.lang.String</code> class, use the following simple command:
+		</p>
+		<code-block lang="console">
+			javap java.lang.String
+		</code-block>
+		<p>
+			The <code>javap</code> command displays its output to stdout. If you want to store the output in a file, use
+			the following command instead:
+		</p>
+		<code-block lang="console">
+			javap java.lang.String &gt; StringMethods.txt
+		</code-block>
+		<p>
+			If no option is specified, <code>javap</code> tool prints the package, protected, and public fields and
+			methods of the
+			specified classes. In fact the output of the command can be customized using options. The set of options
+			themselves can be viewed using the <code>javap -help</code> command or <code>javap -?</code> command or
+			<code>javap --help</code> command options or without using any options as follows:
+		</p>
+		<code-block lang="console">
+			javap
+		</code-block>
+		<p> It displays the available options with a brief description as follows:</p>
+		<code-block include-lines="1-34" lang="console" src="insidejava/javatools/javap/console"/>
+		<p>The options are self-explanatory.</p>
+		<p>
+			This tool can also be used to disassemble the byte code in a readable format
+			using <code>–c</code> option.
+		</p>
+		<note>
+			Java class file contains the so called byte code, which is translatable to op
+			codes/mnemonics.
+		</note>
+		<p> Consider the following simple Java class: </p>
+		<code-block lang="java" src="insidejava/javatools/javap/HelloWorld.java"/>
+		<p>
+			Compile this program and use the following command to see the contents of the HelloWorld
+			class file in op-code format:
+		</p>
+		<code-block lang="console">
+			javap -c HelloWorld
+		</code-block>
+		<p>A part of the output is shown here:</p>
+		<code-block include-lines="37-51" lang="console" src="insidejava/javatools/javap/console"/>
+		<p>
+			It is easy to see the relation between the source code and the byte code To print more information,
+			use the following command: <code> javap -c -s -verbose HelloWorld</code>
+		</p>
+		<code-block collapsed-title="javap -c -s -verbose HelloWorld" collapsible="true"
+		            include-lines="53-118" lang="console"
+		            src="insidejava/javatools/javap/console"/>
+	</procedure>
+</topic>

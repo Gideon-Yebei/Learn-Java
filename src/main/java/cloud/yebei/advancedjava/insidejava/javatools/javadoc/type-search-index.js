@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"cloud.yebei.advancedjava.insidejava.javatools.javadoc","l":"Point"}];updateSearchResults();

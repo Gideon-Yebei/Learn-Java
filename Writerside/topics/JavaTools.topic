@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic help-id="Java-Tools"
+       id="JavaTools"
+       title="JavaTools"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+	<procedure id="introduction" title="INTRODUCTION">
+		<p>
+			Java beginners often use <code>javac</code> and <code>java</code> to compile and run Java programs
+			However, JDK comes with a lot of other powerful tools such as <code>jar, jhat, jdb, javap, javadoc, jcmd,
+			javah, keytool, jconsole, jps, jstatd, jstat, jinfo, jmap, jstack</code> and many more to enable Java
+			developers to program better. This chapter gives a quick reference of the first six (not in order) tools
+			available default with the Java JDK.
+		</p>
+	</procedure>
+
+</topic>

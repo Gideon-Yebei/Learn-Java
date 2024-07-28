@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic help-id="JAVADOC"
+       id="javadoc"
+       title="javadoc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+	<procedure id="0procedure0">
+		<p>
+			Documentation is an important part of program code. It not only helps others to understand the
+			program, but helps the author to remind how his/her own older programs also work. Since external
+			documentation may easily become outdated as the program changes, Java encourages us to write
+			documentation directly in the source code. It requires less efforts to update documentation as and
+			when program code changes
+		</p>
+		<p>
+			Java standardizes the syntax and semantics of writing documentation. It also provides a tool
+			<code>javadoc</code> to generate HTML files to view the documentation from a web browser in a convenient
+			way.
+		</p>
+		<note>
+			Java also uses this tool to generate Java API specification from the source code. In fact, if
+			we have the source code, we ourselves can generate this. We can also generate HTML documentation
+			similar to the Java API reference pages using <code>javadoc.</code>
+		</note>
+		<p>
+			Since documentation comments (or simply doc comments) go directly in the source code, we
+			must hide it from Java compiler. So, documentation is written as special comments between the
+			character sequence <code>/**</code> and <code>*/</code> that begin and end the comment respectively.
+		</p>
+		<note>
+			Starting delimiter must be <code>/**</code> (not <code>/*</code>), otherwise, <code>javadoc</code> tool will
+			not process the comments.
+		</note>
+		<p> Here is an example of single line comment:</p>
+		<code-block lang="java">
+			/** This is a single line java doc comment. */
+		</code-block>
+		<p> Comments can spread multiple lines:</p>
+		<code-block lang="java">
+			/**
+			 This is an example of comments
+			 that spans multiple lines.
+			 */
+		</code-block>
+		<p>
+			The <code>javadoc</code> preserves all white spaces between <code>/**</code> and <code>*/</code>. However,
+			if leading asterisks on each line are used, white spaces (blanks and tabs) preceding the initial asterisk
+			<code>(*)</code> characters are discarded. Here is an example:
+		</p>
+		<code-block lang="java">
+			/**
+			 * This is also an example of comments
+			 * that spans multiple lines.
+			 */
+		</code-block>
+		<p>
+			A doc comment may be attached with only <code>class, interface, constructor, method, or field</code>
+			declarations by writing the comment immediate before them. The following is a comment attached
+			with a class X.
+		</p>
+		<code-block lang="java">
+			/** Represents the class of two-dimensional geometrical points. */
+			public class Point {
+			}
+		</code-block>
+		<p> Similarly, the following attaches a comment with a method.</p>
+		<code-block lang="java">
+			public class Point {
+				private int x, y;
+
+				/** Returns x coordinate of the point */
+				public int getX() {
+					return x;
+				}
+			}
+		</code-block>
+		<tip>
+			The first sentence of each doc comment should be a summary sentence, containing a concise but
+			complete description of the declared entity.
+		</tip>
+		<p>The <code>javadoc</code> tool ignores any doc comment placed in the body of a method. </p>
+		<code-block lang="java">
+			public class Point {
+				private int x, y;
+
+				public int getY() {
+					/** This comment will not be processed by javadoc */
+					return y;
+				}
+			}
+		</code-block>
+		<p>
+			So far, we have seen how to write a simple doc comment. Let us now generate the HTML files,
+			using <code>javadoc</code> command. It parses the declarations and documentation comments in the specified
+			file(s) and produces a set of HTML pages describing, by default, the public and protected classes,
+			interfaces, constructors, methods, and fields. We can pass either a series of Java package names or
+			source files to <code>javadoc</code> as argument(s). Here is an example
+		</p>
+		<code-block collapsed-title="Point.java" collapsible="true" lang="java"
+		            src="insidejava/javatools/javadoc/Point.java"/>
+		<code-block lang="console">
+			$ javadoc.exe .\Point.java
+		</code-block>
+		<p>This generates a set of files. The output of this command is show below:</p>
+		<code-block lang="console">
+			Loading source file .\Point.java...
+			Constructing Javadoc information...
+			Building index for all the packages and classes...
+			Standard Doclet version 22.0.2+9
+			Building tree for all the packages and classes...
+			Generating .\cloud\yebei\advancedjava\insidejava\javatools\javadoc\Point.html...
+			Generating .\cloud\yebei\advancedjava\insidejava\javatools\javadoc\package-summary.html...
+			Generating .\cloud\yebei\advancedjava\insidejava\javatools\javadoc\package-tree.html...
+			Generating .\overview-tree.html...
+			Generating .\allclasses-index.html...
+			Building index for all classes...
+			Generating .\allpackages-index.html...
+			Generating .\index-all.html...
+			Generating .\search.html...
+			Generating .\index.html...
+			Generating .\help-doc.html...
+		</code-block>
+		<p>
+			As we can see, a set of files is generated in the current directory. The <code>index.html</code> file is the
+			front page with frames. If we open this file using a browser, it looks like this:
+		</p>
+		<img alt="image.png" border-effect="rounded" src="image.png"/>
+		<p>
+			We can place HTML tags inside the description part as usual. For example, the below example
+			makes use of &lt;b&gt; tag to impose more importance
+		</p>
+		<code-block lang="java">
+			/**
+			 * The &lt;b&gt;javc&lt;/b&gt; is an import tool.
+			 */
+		</code-block>
+		<p>
+			In addition to main description, doc comment may have an optional tag section. The main
+			description starts after the starting delimiter <code>/**</code> and must end before the tag section. The
+			tag section contains special tags, which are used to generate well-formatted API about the code being
+			documented.
+		</p>
+		<p>
+			The tags take the form <code>@tagname</code>. For example, in comments for methods we can use
+			<code>@param</code> and <code>@return</code> tags (if applicable) to describe the method’s parameters and
+			return value, respectively.
+		</p>
+		<p>
+			The <code>@param</code> tag should be followed by the parameter’s name, and then
+			a description of that parameter. Here is an example:
+		</p>
+		<code-block include-lines="19-29" lang="java" src="insidejava/javatools/javadoc/Point.java"/>
+		<p>
+			Similarly, the <code>@return</code> tag is followed simply by a description of the return value.
+		</p>
+		<code-block include-lines="30-38" lang="java" src="insidejava/javatools/javadoc/Point.java"/>
+		<p>
+			The argument to a tag includes any text following the tag up to, but not including, either the next
+			tag, or the end of the doc comment
+		</p>
+		<b>The summary of frequently used tags</b>
+		<table>
+			<tr>
+				<td>Tag with syntax</td>
+				<td>Description</td>
+			</tr>
+			<tr>
+				<td>@author name-text</td>
+				<td>Adds an “Author” entry with the specified name-text</td>
+			</tr>
+			<tr>
+				<td>{@code text}</td>
+				<td>Displays text in code font</td>
+			</tr>
+			<tr>
+				<td>{@docRoot}</td>
+				<td>Represents the relative path to the generated document’s (destination) root directory from any
+					generated page.
+				</td>
+			</tr>
+			<tr>
+				<td>@deprecated deprecated-text</td>
+				<td>Adds a “Deprecated” entry with the specified deprecated-text</td>
+			</tr>
+			<tr>
+				<td>@exception class-name description</td>
+				<td>Adds a “Throws” subheading to the generated documentation, with the class name and description
+					text
+				</td>
+			</tr>
+			<tr>
+				<td>{@inheritDoc}</td>
+				<td>Inherits a comment from the nearest inheritable class or implementable interface</td>
+			</tr>
+			<tr>
+				<td>{@link package.class#member label}</td>
+				<td>Inserts an in-line link with visible text label that points to the documentation for the specified
+					package, class or member name of a referenced class
+				</td>
+			</tr>
+			<tr>
+				<td>{@linkplain package.class#member label}</td>
+				<td>Similar to {@link}, except the link’s label is displayed in plain text than code font</td>
+			</tr>
+			<tr>
+				<td>{@literal text}</td>
+				<td>Displays text without interpreting the text as HTML markup or nested javadoc tags</td>
+			</tr>
+			<tr>
+				<td>@param parameter-name description</td>
+				<td>Adds a parameter with the specified parameter-name followed by the specified description to the
+					“Parameters” section
+				</td>
+			</tr>
+			<tr>
+				<td>@return description</td>
+				<td>Adds a “Returns” section with the description text</td>
+			</tr>
+			<tr>
+				<td>@see reference</td>
+				<td>Adds a “See Also” heading with a link or text entry that points to reference</td>
+			</tr>
+			<tr>
+				<td>@serial field-description | include | exclude</td>
+				<td>Used in the doc comment for a default serializable field</td>
+			</tr>
+			<tr>
+				<td>@serialData data-description</td>
+				<td>Documents the data written by the writeObject() or writeExternal() methods</td>
+			</tr>
+			<tr>
+				<td>@serialField field-name field-type field-description</td>
+				<td>Documents an ObjectStreamField component</td>
+			</tr>
+			<tr>
+				<td>@since since-text</td>
+				<td>Adds a “Since” heading with the specified since-text to the generated documentation</td>
+			</tr>
+			<tr>
+				<td>@throws class-name description</td>
+				<td>Similar to @exception tag</td>
+			</tr>
+			<tr>
+				<td>{@value package.class#field}</td>
+				<td>When {@value} is used in the doc comment of a static field, it displays the value of that constant
+				</td>
+			</tr>
+			<tr>
+				<td>@version version-text</td>
+				<td>Adds a “Version” subheading with the specified version-text to the generated docs when the -version
+					option is used
+				</td>
+			</tr>
+		</table>
+		<p>
+			Some types of tags can be repeated while others cannot. For example, <code>@return</code> tag should appear
+			only once whereas <code>@see</code> tag may appear any number of times. This implies that the tag section
+			may contain any number of tags. Tag names are case-sensitive.
+		</p>
+		<p>
+			There are two kinds of tags: <code>block tags</code>, and <code>inline tags</code>.The block tags (also
+			called standalone tags) and in-line tags appear within curly braces, as <code>{@tagname}</code>. A block tag
+			must start at the beginning of a line or after any leading spaces and an optional asterisk. Otherwise
+			<code>javadoc</code> will ignore them. An in-line tag can appear anywhere in the comment. Here is an
+			example:
+		</p>
+		<code-block lang="java">
+			/**
+			 *  See this infinite loop {@code while(true);}
+			 */
+		</code-block>
+		<p>
+			We can also use one argument custom tags in the form <code>@tagname</code>. Here is an example:
+		</p>
+		<code-block lang="java">
+			/**
+			 *  @task Re-visit the documentation
+			 */
+		</code-block>
+		<p>
+			To enable this tag, use <code>-tag</code> option to the <code>javadoc</code> in the following form:
+		</p>
+		<code-block lang="console">
+			-tag tagname:Xaoptcmf:"caption"
+		</code-block>
+		<p>
+			Here, <code>tagname</code> is the tag to be processed and <code>caption</code> is the heading to be used for
+			this tag. The <code>Xaoptcmf</code> part of the argument determines where in the source code the tag is
+			allowed to be placed, and whether the tag can be disabled (using X). Here is an example
+		</p>
+		<code-block lang="console">
+			$ javadoc -tag task:a:"Remainder" Point.java
+		</code-block>
+		<p>
+			It tells that the tag <code>@task</code> is allowed to be placed in the source code and the heading for this
+			tag will be <code>Remainder</code>.
+		</p>
+	</procedure>
+</topic>

@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic id="jcmd"
+       title="jcmd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+	<procedure id="0procedure0">
+		<p>
+			This tool is used to send diagnostic commands to a specified JVM. To demonstrate how to work
+			with <code>jcmd</code>, we shall first write a simple Java program as follows
+		</p>
+		<code-block lang="java" src="insidejava/javatools/jcmd/LoopForever.java"/>
+		<p>
+			The code is really simple having only an infinite loop. The loop is inserted deliberately so that it
+			makes a JVM up all the time and we can inspect the JVM properties in the meanwhile. Compile the
+			program and run it in a terminal using the following command:
+		</p>
+		<code-block lang="console">
+			javac LoopForEver.java
+			java LoopForEver
+		</code-block>
+		<p>
+			This makes a JVM running indefinitely. The <code>jcmd</code> expects lvmid of the target JVM. A lvmid, is
+			typically, but not necessarily, the operating system’s process identifier for the JVM process. To find
+			lvmid of the JVM, we can use the command without any arguments:
+		</p>
+		<code-block lang="console">
+			jcmd
+		</code-block>
+		<p>
+			It displays all JVMs running on the local machine listed by lvmid followed by main class as follows:
+		</p>
+		<code-block lang="console">
+			14848 LoopForEver
+			6312 org.jetbrains.idea.maven.server.RemoteMavenServer36
+			2444 jdk.jcmd/sun.tools.jcmd.JCmd
+		</code-block>
+		<p>
+			To know the commands that we can give to a JVM, specify the lvmid along with help to the
+			command as follows:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 help
+		</code-block>
+		<p>
+			This displays a list of commands that we can give to the JVM identified by the lvmid 14848. Here
+			is a sample output of the command:
+		</p>
+		<code-block lang="console">
+			14848:
+			The following commands are available:
+			Compiler.CodeHeap_Analytics
+			Compiler.codecache
+			Compiler.codelist
+			Compiler.directives_add
+			Compiler.directives_clear
+			Compiler.directives_print
+			Compiler.directives_remove
+			Compiler.memory
+			Compiler.queue
+			GC.class_histogram
+			GC.finalizer_info
+			GC.heap_dump
+			GC.heap_info
+			GC.run
+			GC.run_finalization
+			JFR.check
+			JFR.configure
+			JFR.dump
+			JFR.start
+			JFR.stop
+			JFR.view
+			JVMTI.agent_load
+			JVMTI.data_dump
+			ManagementAgent.start
+			ManagementAgent.start_local
+			ManagementAgent.status
+			ManagementAgent.stop
+			Thread.dump_to_file
+			Thread.print
+			VM.cds
+			VM.class_hierarchy
+			VM.classes
+			VM.classloader_stats
+			VM.classloaders
+			VM.command_line
+			VM.dynlibs
+			VM.events
+			VM.flags
+			VM.info
+			VM.log
+			VM.metaspace
+			VM.native_memory
+			VM.set_flag
+			VM.stringtable
+			VM.symboltable
+			VM.system_properties
+			VM.systemdictionary
+			VM.uptime
+			VM.version
+			help
+
+			For more information about a specific command use 'help &lt;command&gt;'.
+		</code-block>
+		<p>
+			We can then apply any of the listed commands. To get help about a specific command specify
+			the command after help. For example, to see how to use <code>GC.heap_dump</code> command, use the following
+			command:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 help GC.heap_dump
+		</code-block>
+		<p>This generates a help content as follows:</p>
+		<code-block lang="console" src="insidejava/javatools/jcmd/console"/>
+		<p>
+			So, to store the snapshot of the JVM heap in a file <code>myHeap</code>, we can use the following command:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 GC.heap_dump myHeap
+		</code-block>
+		<p>
+			This dump file can be analyzed using a tool like <code>jhat (java heap analysis tool)</code>
+		</p>
+		<code-block lang="console">
+			14848:
+			Dumping heap to myHeap ...
+			Heap dump file created [2693424 bytes in 0.033 secs]
+		</code-block>
+		<p>
+			Here is another command that gives the JVM version:
+		</p>
+		<code-block lang="console">
+			$ jcmd 14848 VM.version
+			14848:
+			OpenJDK 64-Bit Server VM version 22.0.2+9
+			JDK 22.0.2
+		</code-block>
+		<p>
+			The following command shows the flags (including default flags) used to start the JVM:
+		</p>
+		<code-block lang="console">
+			$ jcmd 14848 VM.flags
+			14848:
+			-XX:CICompilerCount=3 -XX:ConcGCThreads=1 -XX:G1ConcRefinementThreads=4 -XX:G1EagerReclaimRemSetThreshold=12
+			-XX:G1HeapRegionSize=1048576 -XX:G1RemSetArrayOfCardsEntries=12 -XX:G1RemSetHowlMaxNumBuckets=8
+			-XX:G1RemSetHowlNumBuckets=4 -XX:InitialHeapSize=132120576 -XX:MarkStackSize=4194304
+			-XX:MaxHeapSize=2109734912 -XX:MaxNewSize=1265631232 -XX:MinHeapDeltaBytes=1048576 -XX:MinHeapSize=8388608
+			-XX:NonNMethodCodeHeapSize=5832780 -XX:NonProfiledCodeHeapSize=122912730 -XX:ProfiledCodeHeapSize=122912730
+			-XX:ReservedCodeCacheSize=251658240 -XX:+SegmentedCodeCache -XX:SoftMaxHeapSize=2109734912
+			-XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseG1GC -XX:-UseLargePagesIndividualAllocation
+		</code-block>
+		<p>
+			There is also a command <code> PerfCounters.print</code> that displays all the performance-related counters
+			of the specified JVM.
+		</p>
+		<code-block lang="console">
+			$ jcmd 14848 PerfCounter.print
+		</code-block>
+		<p>
+			The output of the command.
+		</p>
+		<code-block collapsible="true" lang="console">
+			14848:
+			java.ci.totalTime=345164
+			java.cls.loadedClasses=4
+			java.cls.sharedLoadedClasses=472
+			java.cls.sharedUnloadedClasses=0
+			java.cls.unloadedClasses=0
+			java.property.java.class.path="."
+			java.property.java.home="C:\Program Files\Eclipse Adoptium\jdk-22.0.2.9-hotspot"
+			java.property.java.library.path="C:\Program Files\Eclipse
+			Adoptium\jdk-22.0.2.9-hotspot\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program
+			Files\PowerShell\7;C:\Program Files\Eclipse Adoptium\jdk-22.0.2.9-hotspot\bin;C:\Program
+			Files\Microsoft\jdk-21.0.3.9-hotspot\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program
+			Files\Git\cmd;C:\Program Files\apache-maven-3.9.8\bin;C:\Program Files\Git LFS;C:\Program
+			Files\dotnet\;C:\Program Files\PostgreSQL\16\bin;C:\Program Files\PowerShell\7\;C:\Program Files\GitHub
+			CLI\;C:\Program Files\nodejs\;C:\Program
+			Files\Docker\Docker\resources\bin;C:\Users\echosodyssey\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\echosodyssey\AppData\Local\Programs\Python\Python312\;C:\Users\echosodyssey\AppData\Local\Microsoft\WindowsApps;C:\Users\echosodyssey\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\echosodyssey\AppData\Local\GitHubDesktop\bin;C:\Users\echosodyssey\AppData\Local\Programs\Microso"
+			java.property.java.version="22.0.2"
+			java.property.java.vm.info="mixed mode, sharing"
+			java.property.java.vm.name="OpenJDK 64-Bit Server VM"
+			java.property.java.vm.specification.name="Java Virtual Machine Specification"
+			java.property.java.vm.specification.vendor="Oracle Corporation"
+			java.property.java.vm.specification.version="22"
+			java.property.java.vm.vendor="Eclipse Adoptium"
+			java.property.java.vm.version="22.0.2+9"
+			java.property.jdk.debug="release"
+			java.rt.vmArgs=""
+			java.rt.vmFlags=""
+			java.threads.daemon=6
+			java.threads.live=7
+			java.threads.livePeak=7
+			java.threads.started=7
+			sun.ci.findWitnessAnywhere=12
+			sun.ci.findWitnessAnywhereSteps=92
+			sun.ci.findWitnessIn=0
+			sun.ci.lastFailedMethod=""
+			sun.ci.lastFailedType=0
+			sun.ci.lastInvalidatedMethod=""
+			sun.ci.lastInvalidatedType=0
+			sun.ci.lastMethod="java/lang/module/ModuleDescriptor$Exports targets"
+			sun.ci.lastSize=5
+			sun.ci.lastType=1
+			sun.ci.nmethodBucketsAllocated=9
+			sun.ci.nmethodBucketsDeallocated=0
+			sun.ci.nmethodBucketsStale=0
+			sun.ci.nmethodBucketsStaleAccumulated=0
+			sun.ci.nmethodCodeSize=35376
+			sun.ci.nmethodSize=49464
+			sun.ci.osrBytes=0
+			sun.ci.osrCompiles=0
+			sun.ci.osrTime=0
+			sun.ci.standardBytes=2328
+			sun.ci.standardCompiles=50
+			sun.ci.standardTime=345164
+			sun.ci.threads=3
+			sun.ci.totalBailouts=0
+			sun.ci.totalCompiles=50
+			sun.ci.totalInvalidates=0
+			sun.cls.appClassBytes=294
+			sun.cls.appClassLoadCount=3
+			sun.cls.appClassLoadTime=42172
+			sun.cls.appClassLoadTime.self=33594
+			sun.cls.classInitTime=168513
+			sun.cls.classInitTime.self=143195
+			sun.cls.classLinkedTime=64352
+			sun.cls.classLinkedTime.self=62741
+			sun.cls.classVerifyTime=860
+			sun.cls.classVerifyTime.self=859
+			sun.cls.defineAppClassTime=2045
+			sun.cls.defineAppClassTime.self=1719
+			sun.cls.defineAppClasses=1
+			sun.cls.initializedClasses=357
+			sun.cls.linkedClasses=400
+			sun.cls.loadedBytes=6120
+			sun.cls.methodBytes=1760
+			sun.cls.sharedClassLoadTime=29944
+			sun.cls.sharedLoadedBytes=1205720
+			sun.cls.sharedUnloadedBytes=0
+			sun.cls.sysClassBytes=8512
+			sun.cls.sysClassLoadTime=6955
+			sun.cls.time=242108
+			sun.cls.unloadedBytes=0
+			sun.cls.unsafeDefineClassCalls=0
+			sun.cls.verifiedClasses=1
+			sun.gc.cause="No GC"
+			sun.gc.collector.0.invocations=0
+			sun.gc.collector.0.lastEntryTime=0
+			sun.gc.collector.0.lastExitTime=0
+			sun.gc.collector.0.name="G1 young collection pauses"
+			sun.gc.collector.0.time=0
+			sun.gc.collector.1.invocations=1
+			sun.gc.collector.1.lastEntryTime=6263651149
+			sun.gc.collector.1.lastExitTime=6263718968
+			sun.gc.collector.1.name="G1 full collection pauses"
+			sun.gc.collector.1.time=67830
+			sun.gc.collector.2.invocations=0
+			sun.gc.collector.2.lastEntryTime=0
+			sun.gc.collector.2.lastExitTime=0
+			sun.gc.collector.2.name="G1 concurrent cycle pauses"
+			sun.gc.collector.2.time=0
+			sun.gc.compressedclassspace.capacity=131072
+			sun.gc.compressedclassspace.maxCapacity=1073741824
+			sun.gc.compressedclassspace.minCapacity=0
+			sun.gc.compressedclassspace.used=4336
+			sun.gc.generation.0.agetable.bytes.00=0
+			sun.gc.generation.0.agetable.bytes.01=0
+			sun.gc.generation.0.agetable.bytes.02=0
+			sun.gc.generation.0.agetable.bytes.03=0
+			sun.gc.generation.0.agetable.bytes.04=0
+			sun.gc.generation.0.agetable.bytes.05=0
+			sun.gc.generation.0.agetable.bytes.06=0
+			sun.gc.generation.0.agetable.bytes.07=0
+			sun.gc.generation.0.agetable.bytes.08=0
+			sun.gc.generation.0.agetable.bytes.09=0
+			sun.gc.generation.0.agetable.bytes.10=0
+			sun.gc.generation.0.agetable.bytes.11=0
+			sun.gc.generation.0.agetable.bytes.12=0
+			sun.gc.generation.0.agetable.bytes.13=0
+			sun.gc.generation.0.agetable.bytes.14=0
+			sun.gc.generation.0.agetable.bytes.15=0
+			sun.gc.generation.0.agetable.size=16
+			sun.gc.generation.0.capacity=3145728
+			sun.gc.generation.0.maxCapacity=2109734912
+			sun.gc.generation.0.minCapacity=0
+			sun.gc.generation.0.name="young"
+			sun.gc.generation.0.space.0.capacity=3145728
+			sun.gc.generation.0.space.0.initCapacity=14680064
+			sun.gc.generation.0.space.0.maxCapacity=2109734912
+			sun.gc.generation.0.space.0.name="eden"
+			sun.gc.generation.0.space.0.used=0
+			sun.gc.generation.0.space.1.capacity=0
+			sun.gc.generation.0.space.1.initCapacity=0
+			sun.gc.generation.0.space.1.maxCapacity=0
+			sun.gc.generation.0.space.1.name="s0"
+			sun.gc.generation.0.space.1.used=0
+			sun.gc.generation.0.space.2.capacity=0
+			sun.gc.generation.0.space.2.initCapacity=0
+			sun.gc.generation.0.space.2.maxCapacity=2109734912
+			sun.gc.generation.0.space.2.name="s1"
+			sun.gc.generation.0.space.2.used=0
+			sun.gc.generation.0.spaces=3
+			sun.gc.generation.1.capacity=5242880
+			sun.gc.generation.1.maxCapacity=2109734912
+			sun.gc.generation.1.minCapacity=0
+			sun.gc.generation.1.name="old"
+			sun.gc.generation.1.space.0.capacity=5242880
+			sun.gc.generation.1.space.0.initCapacity=117440512
+			sun.gc.generation.1.space.0.maxCapacity=2109734912
+			sun.gc.generation.1.space.0.name="space"
+			sun.gc.generation.1.space.0.used=457808
+			sun.gc.generation.1.spaces=1
+			sun.gc.lastCause="Heap Dump Initiated GC"
+			sun.gc.metaspace.capacity=327680
+			sun.gc.metaspace.maxCapacity=1140850688
+			sun.gc.metaspace.minCapacity=0
+			sun.gc.metaspace.used=129984
+			sun.gc.policy.collectors=1
+			sun.gc.policy.desiredSurvivorSize=0
+			sun.gc.policy.gcTimeLimitExceeded=0
+			sun.gc.policy.generations=2
+			sun.gc.policy.maxTenuringThreshold=15
+			sun.gc.policy.name="GarbageFirst"
+			sun.gc.policy.tenuringThreshold=15
+			sun.gc.tlab.alloc=204502
+			sun.gc.tlab.allocThreads=5
+			sun.gc.tlab.fills=6
+			sun.gc.tlab.gcWaste=136314
+			sun.gc.tlab.maxFills=2
+			sun.gc.tlab.maxGcWaste=36697
+			sun.gc.tlab.maxRefillWaste=75
+			sun.gc.tlab.maxSlowAlloc=0
+			sun.gc.tlab.refillWaste=75
+			sun.gc.tlab.slowAlloc=0
+			sun.os.hrt.frequency=10000000
+			sun.os.hrt.ticks=8746345327
+			sun.perfdata.majorVersion=2
+			sun.perfdata.minorVersion=0
+			sun.perfdata.overflow=0
+			sun.perfdata.size=65536
+			sun.perfdata.timestamp=1027500
+			sun.perfdata.used=13560
+			sun.property.sun.boot.library.path="C:\Program Files\Eclipse Adoptium\jdk-22.0.2.9-hotspot\bin"
+			sun.rt._sync_ContendedLockAttempts=0
+			sun.rt._sync_Deflations=0
+			sun.rt._sync_FutileWakeups=0
+			sun.rt._sync_Inflations=1
+			sun.rt._sync_MonExtant=1
+			sun.rt._sync_Notifications=0
+			sun.rt._sync_Parks=0
+			sun.rt.applicationTime=626315925800
+			sun.rt.createVmBeginTime=1722154395490
+			sun.rt.createVmEndTime=1722154395592
+			sun.rt.internalVersion="OpenJDK 64-Bit Server VM (22.0.2+9) for windows-amd64 JRE (22.0.2+9), built on
+			2024-07-16T00:00:00Z by "admin" with MS VC++ 17.7 (VS2022)"
+			sun.rt.javaCommand="LoopForEver"
+			sun.rt.jvmCapabilities="1100000000000000000000000000000000000000000000000000000000000000"
+			sun.rt.jvmVersion=369099273
+			sun.rt.safepointSyncTime=78800
+			sun.rt.safepointTime=23131300
+			sun.rt.safepoints=2
+			sun.rt.vmInitDoneTime=1722154395555
+			sun.threads.cpu_time.gc_conc_mark=0
+			sun.threads.cpu_time.gc_conc_refine=0
+			sun.threads.cpu_time.gc_parallel_workers=0
+			sun.threads.cpu_time.gc_service=93750000
+			sun.threads.cpu_time.vm=46875000
+			sun.threads.total_gc_cpu_time=78125000
+			sun.threads.vmOperationTime=230050
+		</code-block>
+		<p>
+			Another powerful feature of <code>jcmd</code> is that it allows us to control <code>Java Flight Recordings
+			(JFR)</code> from command line. To do this JFR must be enabled by starting the application using the flags
+			<code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder</code> to the JVM as follows:
+		</p>
+		<code-block lang="console">
+			java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder LoopForEver
+		</code-block>
+		<p>
+			We can see that JFR commands have been enabled by using the <code>jcmd</code>. The commands relevant to
+			Java Flight Recorder are: <code>JFR.check</code>, <code>JFR.configure</code>, <code>JFR.dump</code>, <code>JFR.start</code>,
+			<code>JFR.stop</code>, and <code>JFR.view</code>. The JFR.start command
+			is used to control how and when actual recording should happen. For example, to start a recording
+			after 2 seconds with duration 30 seconds on the JVM with the identifier <code>14848</code>, and save it to
+			the file
+			“r30s.jfr” in the current directory, use the following:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 JFR.start duration=30s filename=r30s.jfr delay=2s name=test
+		</code-block>
+		<p>
+			This recording is identified by the name “test”, which is used by other JFR commands. A flight
+			recording can be fired by specifying options to the JVM directly. For example, the following does
+			the same thing as above:
+		</p>
+		<code-block lang="console">
+			java -XX:+UnlockCommercialFeatures -XX:+FlightRecorder
+			XX:StartFlightRecording=delay=20s,duration=30s,name=test,filename=r30s.jfr
+			LoopForEver
+		</code-block>
+		<p>
+			The <code>JFR</code>.check displays the status of all recording command. For example:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 JFR.check
+		</code-block>
+		<p>
+			To stop a recording, use the <code>JFR.stop</code> command specifying the name of the recording to be
+			stopped as follows:
+		</p>
+		<code-block lang="console">
+			jcmd 14848 JFR.stop name=test
+		</code-block>
+		<p>
+			Finally, to dump the recordings to a file, we can use The <code>JFR.dump</code> command as follows:
+		</p>
+		<code-block lang="console">
+			jcmd 432 JFR.dump name=test file_name=r30s.jfr
+		</code-block>
+		<note>
+			<code>jcmd</code> must be used on the same machine where the JVM is running, and have the same
+			effective user and group identifiers that were used to launch the JVM.
+		</note>
+
+	</procedure>
+
+</topic>
