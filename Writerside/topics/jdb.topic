@@ -1,124 +1,283 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE topic
-		SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
 <topic id="jdb"
        title="jdb"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
 
-	<procedure id="0procedure0">
-		<p>
-			A good programmer should have good skills to debug programs. This skill enables the programmer
-			to find any subtle bugs or defects which are not visible during code review or comes when a particular
-			situation occurs and removes them.
-		</p>
-		<p>
-			The old method of debugging that uses print statements here and there in the program makes the program
-			simply ugly. Although, they can be removed before delivering the program finally, they make a simple program
-			almost unreadable.
-		</p>
-		<p>
-			Java runtime debugger known as <code>jdb</code> which is a very useful tool to debug Java code. The
-			<code>jdb</code> tool allows us to query to a JVM and displays information. The JVM may be started by the
-			<code>jdb</code> itself or may be an existing one.
-		</p>
-		<p>
-			We shall first use <code>jdb</code> to start a JVM and to debug an application. To demonstrate how
-			<code>jdb</code> works, we shall use the following Java program:
-		</p>
-		<code-block lang="java" src="insidejava/javatools/jdb/Test.java"/>
-		<p>
-			Although, it is a very simple and correct program that does not do any useful task, it keeps the
-			program logic simple and helps us concentrate on only debugging the program. Compile this program
-			with the <code>-g</code> option as follows
-		</p>
-		<code-block lang="console">
-			javac -g Test.java
-		</code-block>
-		<p>
-			The <code>-g</code> option tells the compiler to place all debugging information in the generated class file
-			<code>Test.class</code>.
-		</p>
-		<p>
-			The application is ready to be run and debugged using <code>jdb</code>. Like other commands, you
-			can use <code>–help</code> option to see the syntax of using <code>jdb</code> command.
-		</p>
-		<p>
-			We can start a debugging session for our <code>Test.class</code> application as follows:
-		</p>
-		<code-block lang="console">
-			jdb Test
-		</code-block>
-		<p>If everything goes fine, you see the following message: </p>
-		<code-block include-lines="2,3" lang="console" src="insidejava/javatools/jdb/console"/>
-		<p>
-			This starts a new Java VM, stops it before executing the first statement of the class. We can now
-			apply various commands at this prompt. To see the available commands we can use <code>help</code> command.
-		</p>
-		<p>
-			We need to give <code>run</code> command at the prompt to start the application. However, if we run the
-			application, it will exit immediately as the main method does not have anything that will make the
-			application waiting. All we see is the output of the main method.
-		</p>
-		<p>
-			But that is just not what we want to see. To see program state at different time of its execution, we set a
-			breakpoint before applying the <code>run</code> command, so that when the program is run, the execution
-			stops at that breakpoint.
-		</p>
-		<p>
-			We can set breakpoints in two ways: using <code>stop in</code> or <code>stop at</code> commands. The former
-			sets a breakpoint in a specified method and the latter sets a breakpoint at a given line number and their
-			respective syntax are:
-		</p>
-		<code-block lang="console">
-			stop in &lt;class id&gt;.&lt;method&gt;[(argument_type, ...)]
-			stop at &lt;class id&gt;:&lt;line&gt;
-		</code-block>
-		<p>Let’s set a breakpoint at the beginning of the main() method as follows:</p>
-		<code-block lang="console">
-			stop in Test.main(java.lang.String[])
-		</code-block>
-		<code-block include-lines="3-5" lang="console" src="insidejava/javatools/jdb/console"/>
-		<p>
-			We must specify class name. However, specifying the parameter is mandatory if there are
-			overloaded methods. So the following command will also work
-		</p>
-		<code-block lang="console">
-			stop in Test.main
-		</code-block>
-		<code-block include-lines="6-8" lang="console" src="insidejava/javatools/jdb/console"/>
-		<p>
-			Since the application has not yet started, the class <code>Test</code> has not yet been loaded in the JVM,
-			the breakpoint is not immediately set. Instead it postpones setting the breakpoint till class is actually
-			loaded. We can now give the run command
-		</p>
-		<code-block lang="console">
-			run
-		</code-block>
-		<code-block include-lines="9-20" lang="console" src="insidejava/javatools/jdb/console"/>
+    <procedure id="0procedure0">
+        <p>
+            A good programmer should have good skills to debug programs. This skill enables the programmer
+            to find any subtle bugs or defects which are not visible during code review or comes when a particular
+            situation occurs and removes them.
+        </p>
+        <p>
+            The old method of debugging that uses print statements here and there in the program makes the program
+            simply ugly. Although, they can be removed before delivering the program finally, they make a simple program
+            almost unreadable.
+        </p>
+        <p>
+            Java runtime debugger known as <code>jdb</code> which is a very useful tool to debug Java code. The
+            <code>jdb</code> tool allows us to query to a JVM and displays information. The JVM may be started by the
+            <code>jdb</code> itself or may be an existing one.
+        </p>
+        <p>
+            We shall first use <code>jdb</code> to start a JVM and to debug an application. To demonstrate how
+            <code>jdb</code> works, we shall use the following Java program:
+        </p>
+        <code-block lang="java" src="insidejava/javatools/jdb/Test.java"/>
+        <p>
+            Although, it is a very simple and correct program that does not do any useful task, it keeps the
+            program logic simple and helps us concentrate on only debugging the program. Compile this program
+            with the <code>-g</code> option as follows
+        </p>
+        <code-block include-lines="1" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            The <code>-g</code> option tells the compiler to place all debugging information in the generated class file
+            <code>Test.class</code>.
+        </p>
+        <p>
+            The application is ready to be run and debugged using <code>jdb</code>. Like other commands, you
+            can use <code>–help</code> option to see the syntax of using <code>jdb</code> command.
+        </p>
+        <p>
+            We can start a debugging session for our <code>Test.class</code> application as follows:
+        </p>
+        <code-block include-lines="3" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>If everything goes fine, you see the following message: </p>
+        <code-block include-lines="5-6" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            This starts a new Java VM, stops it before executing the first statement of the class. We can now
+            apply various commands at this prompt. To see the available commands we can use <code>help</code> command.
+        </p>
+        <p>
+            We need to give <code>run</code> command at the prompt to start the application. However, if we run the
+            application, it will exit immediately as the main method does not have anything that will make the
+            application waiting. All we see is the output of the main method.
+        </p>
+        <p>
+            But that is just not what we want to see. To see program state at different time of its execution, we set a
+            breakpoint before applying the <code>run</code> command, so that when the program is run, the execution
+            stops at that breakpoint.
+        </p>
+        <p>
+            We can set breakpoints in two ways: using <code>stop in</code> or <code>stop at</code> commands. The former
+            sets a breakpoint in a specified method and the latter sets a breakpoint at a given line number and their
+            respective syntax are:
+        </p>
+        <code-block include-lines="8-9" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>Let’s set a breakpoint at the beginning of the main() method as follows:</p>
+        <code-block include-lines="11" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="13-16" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            We must specify class name. However, specifying the parameter is mandatory if there are
+            overloaded methods. <b>So the following command will also work</b>
+        </p>
+        <code-block include-lines="18" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="19-23" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            Since the application has not yet started, the class <code>Test</code> has not yet been loaded in the JVM,
+            the breakpoint is not immediately set. Instead it postpones setting the breakpoint till class is actually
+            loaded. We can now give the <code>run</code> command
+        </p>
+        <code-block include-lines="25" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="26-37" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            The <code>jdb</code> loads the class Test (that was specified when we started jdb) and sets the breakpoint
+            that we configured earlier and tries to execute main method and allows JVM to proceed. The JVM reaches
+            the first breakpoint and stops.
+        </p>
+        <p>
+            It is also possible to run any class by specifying it as an argument to the run command. Anyway, we can see
+            the line about to be executed using <code>list</code> command.
+        </p>
+        <code-block include-lines="39" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="41-52" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            The line to be executed is shown by <code>=&gt;</code>. To execute current line <code>next</code> command is
+            used
+        </p>
+        <code-block include-lines="54" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="56-59" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            It executes the current line and shows the next line to be executed. Let us apply another <code>next</code>
+            command:
+        </p>
+        <code-block include-lines="63" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="65-70" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            If a line contains a method call, the next command completes that too. To step over the function
+            call, we use <code>step</code> command:
+        </p>
+        <code-block include-lines="72" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="74-79" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            This way we can issue as many <code>next</code> and <code>step</code> commands as we want to execute
+            instructions. To finish the execution of the current <code>function add()</code> and to go back to the
+            caller <code>main()</code>, we can use <code>step up</code> command:
+        </p>
+        <code-block include-lines="81" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="83-88" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            Let us apply the <code>next</code> command <b>twice</b>. Then to see the values of all local variables
+            including the arguments passed in a method, we can use <code>locals</code> command
+        </p>
+        <code-block include-lines="90" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="92-100" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To print the value of a specific variable, use <code>print</code> command:
+        </p>
+        <code-block include-lines="102" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="104-106" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To change the value of a variable <code>x</code>, use <code>set</code> command:
+        </p>
+        <code-block include-lines="108" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="110-112" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            We can verify the assignment using <code>print</code> command again:
+        </p>
+        <code-block include-lines="114" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="116-118" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To print the field <code>v</code> of the object t use <code>t.v</code>
+        </p>
+        <code-block include-lines="120" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="122-124" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To see detailed information about the object, use <code>dump</code> command
+        </p>
+        <code-block include-lines="126" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="128-132" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            We can see what <b>all classes are currently loaded</b> in the JVM by using the <code>classes</code>
+            command.
+        </p>
+        <code-block include-lines="134" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>The following shows a small portion of the output:</p>
+        <code-block include-lines="136-154" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To know the information about a class, we can use <code>class</code> command specifying the class as an
+            argument
+        </p>
+        <code-block include-lines="156" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="158-161" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            The <code>class</code> command shows the name of <b>super class, interfaces implemented, nested classes
+            etc.</b> To see which methods are available on a class, use <code>methods</code> command
+        </p>
+        <code-block include-lines="163" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="165-184" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            The <code>methods</code> command lists <b>method signatures</b> of the methods written in given class as
+            well as inherited from the super class. Similarly, to see which fields are available on a class, use
+            <code>fields</code> command:
+        </p>
+        <code-block include-lines="186" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="188-191" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <note>
+            <code>Test</code> has only one field <code>v</code>. Watching where in the code, a particular field is being
+            accessed or modified is an important part of debugging. This is done using the <code>watch</code> command.
+            However,to use this command effectively, we first set up another command which gets called when any such
+            watch point is hit.
+        </note>
+        <p>
+            We can do this using the command <code>monitor</code>. It takes another command as an argument and executes
+            the latter command when the following scenarios are encountered:
+        </p>
+        <list>
+            <li>a field access/modification watch point is reached</li>
+            <li>a breakpoint is reached</li>
+            <li>next, step, step up, step in commands are executed</li>
+            <li>a method is entered/exited while tracing of methods is ON</li>
+        </list>
+        <p>
+            Here is an example:
+        </p>
+        <code-block include-lines="193" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="195-196" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            This way we can set up as many monitors as we want. Each monitor is identified by an integer
+            number which can be used to remove the monitor later.
+        </p>
+        <p>
+            The list of monitors together with their ids can be listed using the same <code>monitor</code> command
+            without any argument
+        </p>
+        <code-block include-lines="198" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="200-202" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            We can now set up a watch point as follows:
+        </p>
+        <code-block include-lines="204" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="206-208" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            Apply the <code>next</code> command to see the behaviour now:
+        </p>
+        <code-block include-lines="210" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="212-228" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            Use <code>unwatch</code> command if you do not watch a field any more
+        </p>
+        <code-block include-lines="230" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="232-234" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            Use <code>unmonitor</code> command to remove the monitor if it is no longer necessary.
+        </p>
+        <code-block include-lines="236" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="238-240" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To see all break points at a particular moment use <code>clear</code> command
+        </p>
+        <code-block include-lines="242" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="244-247" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            To continue the execution continuously (i.e. until a break point is reached) use <code>cont</code> command:
+        </p>
+        <code-block include-lines="249" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <code-block include-lines="251-253" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            And finally, <b>to exit JDB</b>, use <code>exit</code> or <code>quit</code> command
+        </p>
+        <note>
+            <code>jdb</code> may be used to connect to an already started <code>JVM</code> using the <code>Java Debug
+            Interface (JDI)</code>
+        </note>
+        <p>
+            The <code>JDI</code> is a <b>high-level Java API that defines the mechanisms for communication between
+            debuggers and similar systems and running (usually remote) JVMs</b>. The connection is established with so
+            called <code>connectors</code>
+        </p>
+        <p>
+            The JDK traditionally ships a set of connectors the jdb can use to connect to a JVM such as
+            <code>SACoreAttachingConnector</code>, <code>SADebugServerAttachingConnector</code>, and <code>SAPIDAttachingConnector</code>.
+        </p>
+        <p>
+            You can see the <b>available connectors</b> using the following command:
+        </p>
+        <code-block include-lines="255" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <p>
+            This lists all available connectors with a small description of the arguments they take.
+        </p>
+        <b>Small potion of the output</b>
+        <code-block lang="shell">
+            Connector: com.sun.jdi.ProcessAttach Transport: local
+            description: Attaches to debuggee by process-id (pid)
 
-		<p>
-			The <code>jdb</code> loads the class Test (that was specified when we started jdb) and sets the breakpoint
-			that we configured earlier and tries to execute main method and allows JVM to proceed. The JVM reaches
-			the first breakpoint and stops.
-		</p>
-		<p>
-			It is also possible to run any class by specifying it as an argument to the run command. Anyway, we can see
-			the line about to be executed using <code>list</code> command.
-		</p>
-		<code-block lang="console">
-			list
-		</code-block>
-		<code-block include-lines="21-31" lang="console" src="insidejava/javatools/jdb/console"/>
-		<p>
-			The line to be executed is shown by <code>=&gt;</code>. To execute current line <code>next</code> command is
-			used
-		</p>
-		<code-block include-lines="32-36" lang="console" src="insidejava/javatools/jdb/console"/>
-		<p>
-			It executes the current line and shows the next line to be executed. Let us apply another <code>next</code>
-			command:
-		</p>
-		<code-block include-lines="32-36" lang="console" src="insidejava/javatools/jdb/console"/>
-	</procedure>
+            Required Argument: pid (no default)
+            description: pid
+
+            Argument: timeout (no default)
+            description: Timeout while waiting to attach
+
+            . . .
+        </code-block>
+        <p>
+            The following command instructs jdb to use a connector named <code>
+            sun.jvm.hotspot.jdi.SAPIDAttachingConnector</code> to connect to a JVM having PID 1234
+        </p>
+        <code-block include-lines="257" lang="shell" src="insidejava/javatools/jdb/console"/>
+        <b>Once <code>jdb</code> is connected to the JVM, you can fire commands as usual.</b>
+    </procedure>
 </topic>

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE instance-profile
-		SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="Learn-Java"
                   name="Learn-Java"
                   start-page="About-Learn-Java.topic">
 
-	<toc-element topic="About-Learn-Java.topic"/>
-	<toc-element topic="Inside-Java.topic">
-		<toc-element topic="JavaTools.topic">
-			<toc-element topic="javadoc.topic"/>
-			<toc-element topic="javap.topic"/>
-			<toc-element topic="jcmd.topic"/>
-			<toc-element topic="jhat.topic"/>
-			<toc-element topic="jdb.topic"/>
-		</toc-element>
-	</toc-element>
+    <toc-element topic="About-Learn-Java.topic"/>
+    <toc-element topic="Inside-Java.topic">
+        <toc-element topic="JavaTools.topic">
+            <toc-element topic="javadoc.topic"/>
+            <toc-element topic="javap.topic"/>
+            <toc-element topic="jcmd.topic"/>
+            <toc-element topic="jhat.topic"/>
+            <toc-element topic="jdb.topic"/>
+            <toc-element topic="jar.topic">
+                <toc-element topic="Syntax.topic"/>
+                <toc-element topic="Creating-a-JAR-file.topic"/>
+            </toc-element>
+        </toc-element>
+    </toc-element>
 </instance-profile>

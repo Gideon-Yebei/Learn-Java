@@ -1,22 +1,42 @@
-$ jdb Test
+javac -g Test.java
+
+jdb Test
+
 Initializing jdb ...
+>
+
+stop in <class id>.<method>[(argument_type,...)]
+stop at <class id>:<line>
+
+stop in Test.main(java.lang.String[])
+
 > stop in Test.main(java.lang.String[])
 Deferring breakpoint Test.main(java.lang.String[]).
 It will be set after the class is loaded.
+>
+
+stop in Test.main
+
 > stop in Test.main
 Deferring breakpoint Test.main.
 It will be set after the class is loaded.
+>
+
+run
+
 > run
 run Test
 Set uncaught java.lang.Throwable
 Set deferred uncaught java.lang.Throwable
 >
 VM Started: Set deferred breakpoint Test.main
-Set deferred breakpoint Test.main(java.lang.String[])
 
-Breakpoint hit:
 Breakpoint hit: "thread=main", Test.main(), line=5 bci=0
 5               int x = 2, y = 3;
+
+main[1]
+
+list
 
 main[1] list
 1    public class Test {
@@ -29,10 +49,18 @@ main[1] list
 8               t.set(6);
 9               System.out.println(x + "+" + y + "=" + z);
 10      }
+main[1]
+
+next
+
 main[1] next
 >
 Step completed: "thread=main", Test.main(), line=6 bci=4
 6               int z = add(x, y);
+
+main[1]
+
+next
 
 main[1] next
 >
@@ -40,3 +68,190 @@ Step completed: "thread=main", Test.main(), line=7 bci=10
 7               Test t = new Test();
 
 main[1]
+
+step
+
+main[1] step
+>
+Step completed: "thread=main", Test.<init>(), line=1 bci=0
+1    public class Test {
+
+main[1]
+
+step up
+
+main[1] step up
+>
+Step completed: "thread=main", Test.main(), line=7 bci=17
+7               Test t = new Test();
+
+main[1]
+
+locals
+
+main[1] locals
+Method arguments:
+args = instance of java.lang.String[0] (id=449)
+Local variables:
+x = 2
+y = 3
+z = 5
+t = instance of Test(id=450)
+main[1]
+
+print x
+
+main[1] print x
+ x = 2
+main[1]
+
+set x=10
+
+main[1] set x=10
+ x=10 = 10
+main[1]
+
+print x
+
+main[1] print x
+ x = 10
+main[1]
+
+print t.v
+
+main[1] print t.v
+ t.v = 6
+main[1]
+
+dump t
+
+main[1] dump t
+ t = {
+    v: 6
+}
+main[1]
+
+classes
+
+main[1] classes
+** classes list **
+jdk.internal.vm.VMSupport
+java.lang.invoke.StringConcatFactory
+sun.net.www.protocol.jar.Handler
+java.util.ArrayDeque
+java.util.Deque
+java.util.Queue
+sun.net.util.IPAddressUtil$MASKS
+sun.net.util.IPAddressUtil
+sun.net.www.protocol.file.Handler
+java.net.URLStreamHandler
+sun.net.www.ParseUtil
+java.io.File$PathStatus[]
+java.io.File$PathStatus
+java.net.URL$3
+jdk.internal.access.JavaNetURLAccess
+java.net.URL$DefaultFactory
+. . .
+
+class Test
+
+main[1] class Test
+Class: Test
+extends: java.lang.Object
+main[1]
+
+methods test
+
+main[1] methods Test
+** methods list **
+Test <init>()
+Test main(java.lang.String[])
+Test add(int, int)
+Test set(int)
+java.lang.Object <init>()
+java.lang.Object getClass()
+java.lang.Object hashCode()
+java.lang.Object equals(java.lang.Object)
+java.lang.Object clone()
+java.lang.Object toString()
+java.lang.Object notify()
+java.lang.Object notifyAll()
+java.lang.Object wait()
+java.lang.Object wait(long)
+java.lang.Object wait0(long)
+java.lang.Object wait(long, int)
+java.lang.Object finalize()
+main[1]
+
+fields Test
+
+main[1] fields Test
+** fields list **
+int v
+main[1]
+
+monitor list
+
+main[1] monitor list
+main[1]
+
+monitor
+
+main[1] monitor
+1:  list
+main[1]
+
+watch Test.v
+
+main[1] watch Test.v
+Set watch modification of Test.v
+main[1]
+
+next
+
+main[1] next
+> 10+3=5
+
+Step completed: "thread=main", Test.main(), line=10 bci=40
+10      }
+
+6               int z = add(x, y);
+7               Test t = new Test();
+8               t.set(6);
+9               System.out.println(x + "+" + y + "=" + z);
+10 =>   }
+11
+12      public static int add(int a, int b) {
+13              int c = a + b;
+14              return c;
+15      }
+main[1]
+
+unwatch Test.v
+
+main[1] unwatch Test.v
+Removed: watch modification of Test.v
+main[1]
+
+unmonitor 1
+
+main[1] unmonitor 1
+Unmonitoring 1:  list
+main[1]
+
+clear
+
+main[1] clear
+Breakpoints set:
+        breakpoint Test.main
+main[1]
+
+cont
+
+main[1] cont
+> 2+3=5
+The application exited
+
+jdb -listconnectors
+
+jdb -connect sun.jvm.hotspot.jdi.SAPIDAttachingConnector:pid=1234

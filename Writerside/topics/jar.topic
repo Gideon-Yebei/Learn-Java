@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic id="jar"
+       title="jar"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+    <deflist>
+        <def id="java_a_rchive" title="Java ARchive">
+            <p>
+                A <code>Java ARchive</code> is a file that bundles multiple files into a single one. A <code>JAR</code>
+                file usually contains the files and auxiliary resources. Specifically, <code>JAR</code> files bring the
+                following benefits:
+            </p>
+            <list>
+                <li>Java programs (including core Java API) are distributed usually as JAR files</li>
+                <li>JAR files use ZIP file format. So we can compress/decompress files</li>
+                <li>
+                    Since JAR file contains a bundle of files, a set of files can be transferred over the network using
+                    single request/response pai that takes less time
+                </li>
+                <li>
+                    We can optionally seal packages stored in JAR files to enhance version consistency. Sealing a
+                    package with a JAR file ensures the availability of all classes defined in that package.
+                </li>
+                <li>This also makes distributing a set of files as a single file easy.</li>
+                <li>
+                    It is possible to digitally sign a JAR file containing software that require special privilege. This
+                    allow/disallow the privilege by checking the signature and the author's digital certificate.
+                </li>
+                <li>E can extend the functionality by checking the signature and the author's digital certificate</li>
+                <li>
+                    JAR files can contain special file to hold metadata about the actual files. This allows us to
+                    configure the application on the fly
+                </li>
+            </list>
+        </def>
+    </deflist>
+
+</topic>

@@ -1,0 +1,19 @@
+/* Dark Mode */
+.theme-dark code {
+    color: #e74c3c !important; /* Red */
+    background-color: #2c3e50 !important; /* Dark blue-gray */
+}
+
+/* Light Mode */
+.theme-light code {
+    color: #c7254e !important; /* Dark blue-gray */
+    background-color: #f9f2f4 !important; /* Light pastel gray */
+}
+
+.theme-dark .code-block {
+    border: 1px solid #2c3e50 !important;
+}
+
+.theme-light .code-block {
+    border: 1px solid #ccc !important;
+}

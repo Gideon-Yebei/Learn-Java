@@ -3,7 +3,10 @@
 <buildprofiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd">
 
-	<variables></variables>
+	<variables>
+		<link-color>halloween</link-color>
+		<custom-css>custom.css</custom-css>
+	</variables>
 	<build-profile instance="Learn-Java">
 		<variables>
 			<noindex-content>false</noindex-content>

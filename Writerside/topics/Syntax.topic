@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/xhtml-entities.dtd">
+<topic id="Syntax"
+       title="Syntax"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/topic.v2.xsd">
+
+    <note>
+        JAR files are similar to Unix's/Linux's tar (<b>t</b>ape <b>ar</b>chive) files and the tool <code>jar</code>
+        also has similar command-line options.
+    </note>
+    <p>
+        To check the available options, run the command without any option:
+    </p>
+
+    <code-block collapsed-title="jar --help" collapsible="true" lang="shell" src="insidejava/javatools/jar/console"/>
+    <b>The output is self explanatory. It not only shows the options available, but some examples as well.</b>
+</topic>
